@@ -5,10 +5,13 @@ import Result from "../components/Result";
 import useStore from "../utils/Stores";
 
 const Page = () => {
-  const { url } = useStore();
+  const { models } = useStore();
   const [dataset, setDataset] = useState<string>("");
+  const [modeli, setModel] = useState("");
   const [files, setFiles] = useState<File | null>(null);
-  const [result, setResult] = useState<string | number[] | null>(null);
+  const [result, setResult] = useState<string | string[] | number[] | null>(
+    null,
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -46,9 +49,9 @@ const Page = () => {
         const formData = new FormData();
         formData.append("file", files);
 
-        res = await fetch(url, {
+        res = await fetch("http://localhost:8000/api/predict", {
           method: "POST",
-          body: formData,
+          body: JSON.stringify({ formData, modeltype: models }),
         });
       }
 
@@ -63,10 +66,10 @@ const Page = () => {
           parsedData = dataset; // send raw string
         }
 
-        res = await fetch(url, {
+        res = await fetch("http://localhost:8000/api/predict", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ data: parsedData }),
+          body: JSON.stringify({ data: parsedData, modeltype: models }),
         });
       }
 
@@ -78,6 +81,7 @@ const Page = () => {
       }
 
       const json = await res.json();
+      setModel(json.model);
       setResult(json.prediction);
     } catch (err: any) {
       setError(err.message || "Request failed");
@@ -89,8 +93,11 @@ const Page = () => {
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gray-50 p-4">
       <div className="w-full max-w-6xl mx-auto px-4 m-auto  flex flex-col justify-center items-center">
-        <h1 className="text-4xl font-bold  mb-6 w-full text-center">
+        <h1 className="text-4xl font-bold  mb-6 w-full text-center flex flex-col">
           Data Predictor
+          <span className="text-sm font-semibold">
+            using the {models} method
+          </span>
         </h1>
         <div className=" w-full max-w-5xl m-auto px-3 ">
           {" "}
@@ -120,6 +127,7 @@ const Page = () => {
         {result && (
           <Result
             message={result}
+            model={modeli}
             variant="success"
             className="mt-6 w-full max-w-xl flex flex-col"
           />

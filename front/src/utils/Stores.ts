@@ -1,16 +1,19 @@
 import { create } from "zustand";
 
 type Store = {
-  url: string;
-  setModel: (model: "lr" | "knn" | "tree") => void;
+  models: string;
+  setModel: (
+    model: "knn" | "tree" | "reg" | "svc" | "naive",
+    name: string,
+  ) => void;
 };
 
 const useStore = create<Store>((set) => ({
-  url: "http://localhost:8000/api/predict/lr",
+  models: "linear",
 
-  setModel: (model) =>
+  setModel: (name) =>
     set(() => ({
-      url: `http://localhost:8000/api/predict/${model}`,
+      models: name,
     })),
 }));
 
