@@ -17,11 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from users.views import lr, knn, tree
+from users.views import predict
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/predict/lr', lr),
-    path('api/predict/knn', knn),
-    path('api/predict/tree', tree),
+    path('api/predict', predict),
+
 ]

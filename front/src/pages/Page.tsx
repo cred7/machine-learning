@@ -1,3 +1,4 @@
+import Footer from "../sections/Footer";
 import Page from "../sections/Hero";
 import Navbar from "../sections/Navbar";
 
@@ -6,6 +7,7 @@ const Pages = () => {
     <>
       <Navbar />
       <Page />
+      <Footer />
     </>
   );
 };

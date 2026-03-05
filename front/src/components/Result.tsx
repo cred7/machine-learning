@@ -1,13 +1,15 @@
 import React from "react";
 
 interface ResultProps {
-  message: number[] | string;
+  message: number[] | string[] | string;
+  model?: string;
   variant?: "success" | "error" | "info";
   className?: string;
 }
 
 const Result: React.FC<ResultProps> = ({
   message,
+  model,
   variant = "info",
   className = "",
 }) => {
@@ -23,9 +25,11 @@ const Result: React.FC<ResultProps> = ({
   }
   return (
     <div className={`border-l-4 p-4 ${colors[variant]} ${className}`}>
-      <p className="w-full break-words whitespace-pre-wrap ">
+      <p className="w-full break-words whitespace-pre-wrap flex flex-col items-center ">
+        {model && <span>{model}</span>}
+        <div className="flex flex-row w-full"></div>
         {message instanceof Array
-          ? message.map((j) => <span>{j} ,</span>)
+          ? message.map((j) => <span className="flex-1">{j},</span>)
           : message}
       </p>
     </div>
